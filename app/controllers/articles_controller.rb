@@ -1,11 +1,19 @@
 class ArticlesController < ApplicationController
+
+
+  before_filter :load_article, :except => [:find, :index, :new, :create]
+  before_filter :article_upcase, :only => [:index]
+  around_filter :catch_exceptions
+
+
+
   # GET /articles
   # GET /articles.json
   def index
-    @articles = Article.all
-
+    # @articles = Article.all
+     p @articles.first.title.upcase
     respond_to do |format|
-      format.html # index.html.erb
+      format.html   #index.html.erb
       format.json { render json: @articles }
     end
   end
@@ -34,7 +42,6 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1/edit
   def edit
-    @article = Article.find(params[:id])
   end
 
   # POST /articles
@@ -56,7 +63,6 @@ class ArticlesController < ApplicationController
   # PUT /articles/1
   # PUT /articles/1.json
   def update
-    @article = Article.find(params[:id])
 
     respond_to do |format|
       if @article.update_attributes(params[:article])
@@ -72,7 +78,6 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
-    @article = Article.find(params[:id])
     @article.destroy
 
     respond_to do |format|
@@ -80,4 +85,22 @@ class ArticlesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+    def load_article
+      @article = Article.find(params[:id])
+    end
+
+    def article_upcase
+      @articles = Article.all
+      @articles.each { |a| a.title = a.title.upcase }
+    end
+
+    def catch_exceptions
+       begin
+         yield
+       rescue  => exception
+         redirect_to articles_path
+       end
+     end
 end
