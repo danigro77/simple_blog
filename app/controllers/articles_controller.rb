@@ -3,7 +3,7 @@ class ArticlesController < ApplicationController
 
   before_filter :load_article, :except => [:find, :index, :new, :create]
   before_filter :article_upcase, :only => [:index]
-  around_filter :catch_exceptions
+  # around_filter :catch_exceptions
 
 
 
@@ -11,7 +11,6 @@ class ArticlesController < ApplicationController
   # GET /articles.json
   def index
     # @articles = Article.all
-     p @articles.first.title.upcase
     respond_to do |format|
       format.html   #index.html.erb
       format.json { render json: @articles }
@@ -96,11 +95,11 @@ class ArticlesController < ApplicationController
       @articles.each { |a| a.title = a.title.upcase }
     end
 
-    def catch_exceptions
-       begin
-         yield
-       rescue  => exception
-         redirect_to articles_path
-       end
-     end
+    # def catch_exceptions
+    #       begin
+    #         yield
+    #       rescue  => exception
+    #         redirect_to article_path(params[:id])
+    #       end
+    #     end
 end

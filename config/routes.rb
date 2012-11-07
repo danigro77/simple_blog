@@ -3,8 +3,11 @@ SimpleBlog::Application.routes.draw do
   root to: 'articles#index'
 
   resources :articles do
-    resources :comments, only: [:create, :destroy]
+    resources :comments, only: [:create, :destroy, :show]
   end
+
+
+
 
 
 
